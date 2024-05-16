@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡易紀錄頁面</title>
+</head>
+<body>
+    <h1>紀錄表單</h1>
+    <form id="recordForm">
+        <label for="record">輸入紀錄：</label>
+        <input type="text" id="record" name="record">
+        <button type="submit">提交</button>
+    </form>
+    <h2>紀錄列表</h2>
+    <ul id="recordList"></ul>
+
+    <script>
+        document.getElementById('recordForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const record = document.getElementById('record').value;
+            addRecord(record);
+            document.getElementById('record').value = '';
+        });
+
+        function addRecord(record) {
+            const records = getRecords();
+            records.push(record);
+            localStorage.setItem('records', JSON.stringify(records));
+            renderRecords();
+        }
+
+        function getRecords() {
+            const records = localStorage.getItem('records');
+            return records ? JSON.parse(records) : [];
+        }
+
+        function renderRecords() {
+            const records = getRecords();
+            const recordList = document.getElementById('recordList');
+            recordList.innerHTML = '';
+            records.forEach(record => {
+                const li = document.createElement('li');
+                li.textContent = record;
+                recordList.appendChild(li);
+            });
+        }
+
+        // 初始渲染紀錄
+        renderRecords();
+    </script>
+</body>
+</html>
